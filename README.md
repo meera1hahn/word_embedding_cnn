@@ -1,5 +1,5 @@
 # word_embedding_cnn
-sentiment analysis using a cnn and word embeddings
+Sentiment analysis system using a cnn and word embeddings as input
 
 * uses kaggle challenge's sentiment analysis data from rotten tomatoes
 
