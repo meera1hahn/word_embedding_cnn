@@ -1,6 +1,8 @@
 # word_embedding_cnn
 sentiment analysis using a cnn and word embeddings
 
+* uses kaggle challenge's sentiment analysis data from rotten tomatoes
+
 **to set up:**
 ```
 sudo apt-get install python-numpy python-scipy python-dev python-pip python-nose g++ libopenblas-dev git
