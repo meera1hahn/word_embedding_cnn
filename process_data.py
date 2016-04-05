@@ -6,8 +6,8 @@ import pandas as pd
 
 def build_data_cv(data_folder, cv=10, clean_string=True):
     """
-        Loads data and split into 10 folds.
-        """
+    Loads data and split into 10 folds.
+    """
     revs = []
     pos_file = data_folder[0]
     neg_file = data_folder[1]
@@ -24,9 +24,9 @@ def build_data_cv(data_folder, cv=10, clean_string=True):
             for word in words:
                 vocab[word] += 1
             datum  = {"y":1,
-                "text": orig_rev,
-                    "num_words": len(orig_rev.split()),
-                        "split": np.random.randint(0,cv)}
+                      "text": orig_rev,
+                      "num_words": len(orig_rev.split()),
+                      "split": np.random.randint(0,cv)}
             revs.append(datum)
     with open(neg_file, "rb") as f:
         for line in f:
@@ -40,16 +40,16 @@ def build_data_cv(data_folder, cv=10, clean_string=True):
             for word in words:
                 vocab[word] += 1
             datum  = {"y":0,
-                "text": orig_rev,
-                    "num_words": len(orig_rev.split()),
-                        "split": np.random.randint(0,cv)}
+                      "text": orig_rev,
+                      "num_words": len(orig_rev.split()),
+                      "split": np.random.randint(0,cv)}
             revs.append(datum)
-return revs, vocab
+    return revs, vocab
 
 def get_W(word_vecs, k=100):
     """
-        Get word matrix. W[i] is the vector for word indexed by i
-        """
+    Get word matrix. W[i] is the vector for word indexed by i
+    """
     vocab_size = len(word_vecs)
     word_idx_map = dict()
     W = np.zeros(shape=(vocab_size+1, k), dtype='float32')
@@ -63,7 +63,7 @@ def get_W(word_vecs, k=100):
 
 def load_bin_vec(fname, vocab):
     """
-        """
+    """
     word_vecs = {}
     with open(fname, "rb") as f:
         header = f.readline()
@@ -79,10 +79,10 @@ def load_bin_vec(fname, vocab):
                 if ch != '\n':
                     word.append(ch)
             if word in vocab:
-                word_vecs[word] = np.fromstring(f.read(binary_len), dtype='float32')
+               word_vecs[word] = np.fromstring(f.read(binary_len), dtype='float32')
             else:
                 f.read(binary_len)
-return word_vecs
+    return word_vecs
 
 def load_my_vecs(fname,vocab):
     word_vecs = {}
@@ -103,18 +103,18 @@ def load_my_vecs(fname,vocab):
 
 def add_unknown_words(word_vecs, vocab, min_df=1, k=100):
     """
-        For words that occur in at least min_df documents, create a separate word vector.
-        0.25 is chosen so the unknown vectors have (approximately) same variance as pre-trained ones
-        """
+    For words that occur in at least min_df documents, create a separate word vector.
+    0.25 is chosen so the unknown vectors have (approximately) same variance as pre-trained ones
+    """
     for word in vocab:
         if word not in word_vecs and vocab[word] >= min_df:
             word_vecs[word] = np.random.uniform(-0.25,0.25,k)
 
 def clean_str(string, TREC=False):
     """
-        Tokenization/string cleaning for all datasets except for SST.
-        Every dataset is lower cased except for TREC
-        """
+    Tokenization/string cleaning for all datasets except for SST.
+    Every dataset is lower cased except for TREC
+    """
     string = re.sub(r"[^A-Za-z0-9(),!?\'\`]", " ", string)
     string = re.sub(r"\'s", " \'s", string)
     string = re.sub(r"\'ve", " \'ve", string)
@@ -132,15 +132,15 @@ def clean_str(string, TREC=False):
 
 def clean_str_sst(string):
     """
-        Tokenization/string cleaning for the SST dataset
-        """
+    Tokenization/string cleaning for the SST dataset
+    """
     string = re.sub(r"[^A-Za-z0-9(),!?\'\`]", " ", string)
     string = re.sub(r"\s{2,}", " ", string)
     return string.strip().lower()
 
 if __name__=="__main__":
     w2v_file = sys.argv[1]
-    data_folder = ["posSentences","negSentences"]
+    data_folder = ["rt-polarity.pos","rt-polarity.neg"]
     print "loading data...",
     revs, vocab = build_data_cv(data_folder, cv=10, clean_string=True)
     max_l = np.max(pd.DataFrame(revs)["num_words"])
